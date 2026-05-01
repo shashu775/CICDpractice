@@ -1,12 +1,5 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Clone') {
-            steps {
-                git 'https://github.com/shashu775/CICDpractice.git'
-            }
-        }
+    agent { label 'docker'}
 
         stage('Build Docker Image') {
             steps {
