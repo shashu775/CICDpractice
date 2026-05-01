@@ -4,7 +4,7 @@ pipeline {
 stages {
         stage('Build Docker Image') {
             steps {
-                bat 'cd three-tier-architecture-aws\frontend && docker build -t my-app'
+                bat 'cd three-tier-architecture-aws/frontend && docker build -t my-app'
             }
         }
 
