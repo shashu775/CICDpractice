@@ -1,5 +1,8 @@
 pipeline {
     agent { label 'docker'}
+environment {
+    IMAGE_TAG = "${BUILD_NUMBER}"
+}    
 
 stages {
         stage('Build Docker Image') {
