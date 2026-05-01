@@ -1,15 +1,16 @@
 pipeline {
     agent { label 'docker'}
 
-        stages('Build Docker Image') {
+stages {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-app .'
+                bat 'docker build -t my-app .'
             }
         }
 
-        stages('Verify Image') {
+        stage('Verify Image') {
             steps {
-                sh 'docker images'
+                bat 'docker images'
             }
         }
     
