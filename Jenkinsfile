@@ -26,7 +26,7 @@ stages {
         }
         stage ('Push Docker image'){
             steps{
-                bat ' docker push mynginx:latest 398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
+                bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
             }
         }
 
