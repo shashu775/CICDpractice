@@ -1,13 +1,13 @@
 pipeline {
     agent { label 'docker'}
 
-        stage('Build Docker Image') {
+        stages('Build Docker Image') {
             steps {
                 sh 'docker build -t my-app .'
             }
         }
 
-        stage('Verify Image') {
+        stages('Verify Image') {
             steps {
                 sh 'docker images'
             }
