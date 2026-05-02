@@ -24,12 +24,12 @@ stages {
     
         stage('Tag Docker image'){
             steps{
-                bat 'docker tag mynginx:latest 398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:%IMAGE_TAG%'
+                bat 'docker tag mynginx:latest 398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
             }
         }
         stage ('Push Docker image'){
             steps{
-                bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:%IMAGE_TAG%'
+                bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
             }
         }
         //stage ('Redeploy nginx task') {
