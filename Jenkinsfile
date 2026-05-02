@@ -32,11 +32,18 @@ stages {
                 bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
             }
         }
-        //stage ('Redeploy nginx task') {
-          //  steps{
-            //    bat 'aws ecs update-service --cluster frontend --service shashwat-web-service-3g5o86u0 --force-new-deployment --region us-east-1'
-            //}
-        //}
+        stage ('Update task revision'){
+            steps{
+                bat 'aws ecs describe-task-definition --task-definition shashwat-web  --query taskDefinition --output json | jq "del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)" > new-task-def.json'
+                bat    'aws ecs register-task-definition  --region us-east-1 --cli-input-json file://new-task-def.json' 
+                 }
+        }
+    
+        stage ('Redeploy nginx task') {
+            steps{
+                bat 'aws ecs update-service --cluster frontend --service shashwat-web-service-3g5o86u0 --force-new-deployment --region us-east-1'
+            }
+        }
 
   } 
     
