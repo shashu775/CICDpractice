@@ -24,7 +24,7 @@ stages {
     
         stage('Tag Docker image'){
             steps{
-                bat 'docker tag mynginx:latest 398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest:%IMAGE_TAG%'
+                bat 'docker tag mynginx:latest 398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:%IMAGE_TAG%'
             }
         }
         stage ('Push Docker image'){
