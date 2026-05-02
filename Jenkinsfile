@@ -38,24 +38,23 @@ stages {
           //      bat    'aws ecs register-task-definition  --region us-east-1 --cli-input-json file://new-task-def.json' 
         //         }
        // }
-          stage ('Update task revision') {
+         stage ('Update task revision') {
     steps {
         script {
-            // 1. Get the current definition and clean it using PowerShell (since jq is missing)
+            // 1. Get and Clean the JSON
+            // We use 'aws.exe' and 'foreach-object' to avoid the 'CantActivateDocumentInPipeline' error
             bat """
-            powershell -Command "(aws ecs describe-task-definition --task-definition shashwat-web --query taskDefinition --output json | ConvertFrom-Json) | Object { \$_.PSObject.Properties.Remove('taskDefinitionArn'); \$_.PSObject.Properties.Remove('revision'); \$_.PSObject.Properties.Remove('status'); \$_.PSObject.Properties.Remove('requiresAttributes'); \$_.PSObject.Properties.Remove('compatibilities'); \$_.PSObject.Properties.Remove('registeredAt'); \$_.PSObject.Properties.Remove('registeredBy'); return \$_ } | ConvertTo-Json -Depth 20 | Out-File -FilePath raw-task.json -Encoding ascii"
+            powershell -Command "\$task = aws.exe ecs describe-task-definition --task-definition shashwat-web --query taskDefinition --output json | ConvertFrom-Json; \$task.PSObject.Properties.Remove('taskDefinitionArn'); \$task.PSObject.Properties.Remove('revision'); \$task.PSObject.Properties.Remove('status'); \$task.PSObject.Properties.Remove('requiresAttributes'); \$task.PSObject.Properties.Remove('compatibilities'); \$task.PSObject.Properties.Remove('registeredAt'); \$task.PSObject.Properties.Remove('registeredBy'); \$task | ConvertTo-Json -Depth 20 | Out-File -FilePath raw-task.json -Encoding ascii"
             """
 
-            // 2. Define the new image string
+            // 2. Inject the New Image Tag
             def newImage = "398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:${env.IMAGE_TAG}"
-
-            // 3. Use PowerShell to find the image field and swap the value
             bat """
             powershell -Command "\$json = Get-Content raw-task.json | ConvertFrom-Json; \$json.containerDefinitions[0].image = '${newImage}'; \$json | ConvertTo-Json -Depth 20 | Out-File -FilePath new-task-def.json -Encoding ascii"
             """
 
-            // 4. Register the new version
-            bat 'aws ecs register-task-definition --region us-east-1 --cli-input-json file://new-task-def.json'
+            // 3. Register the new version
+            bat 'aws.exe ecs register-task-definition --region us-east-1 --cli-input-json file://new-task-def.json'
         }
     }
 }
