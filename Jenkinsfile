@@ -41,7 +41,7 @@ stages {
     
         stage ('Redeploy nginx task') {
             steps{
-                bat 'aws ecs update-service --cluster shashwat_nginx --service shashwat-web-service-6eypc117 --force-new-deployment --region us-east-1'
+                bat 'aws ecs update-service --cluster shashwat_nginx --service shashwat-web-service-6eypc117 --task-definition shashwat-web --force-new-deployment --region us-east-1'
             }
         }
 
