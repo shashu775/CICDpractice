@@ -29,7 +29,7 @@ stages {
         }
         stage ('Push Docker image'){
             steps{
-                bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:latest'
+                bat ' docker push  398934907029.dkr.ecr.us-east-1.amazonaws.com/my-nginx-app:%IMAGE_TAG%'
             }
         }
         //stage ('Redeploy nginx task') {
